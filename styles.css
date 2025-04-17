@@ -1,0 +1,218 @@
+:root {
+  --Text: hsl(227, 75%, 14%);
+  --Neutral-800: hsl(226, 25%, 17%);
+  --Neutral-700: hsl(225, 23%, 24%);
+  --Muted-Text: hsl(226, 11%, 37%);
+  --Box-Shadow: hsl(0, 0%, 78%);
+  --Background: linear-gradient(180deg, #ebf2fc 0%, #eef8f9 100%);
+  --Background-Muted: hsl(0, 0%, 93%);
+  --Card-Background: hsl(200, 60%, 99%);
+  --Red-400: hsl(3, 86%, 64%);
+  --Red-500: hsl(3, 71%, 56%);
+  --Btn-Selected: hsl(3, 77%, 44%);
+}
+
+[data-theme="dark"] {
+  --Text: hsl(200, 60%, 99%);
+  --Muted-Text: hsl(0, 0%, 78%);
+  --Box-Shadow: hsl(226, 11%, 37%);
+  --Background: linear-gradient(180deg, #040918 0%, #091540 100%);
+  --Background-Muted: hsl(226, 11%, 37%);
+  --Card-Background: hsl(226, 25%, 17%);
+  --Btn-Selected: hsl(3, 71%, 56%);
+}
+
+[data-theme="dark"] .theme-toggle > img {
+  content: url("./assets/images/icon-sun.svg");
+}
+
+[data-theme="dark"] header > img {
+  filter: invert(100%);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 400;
+  padding: 1.25rem;
+  color: var(--Text);
+  background: var(--Background);
+}
+
+header {
+  display: flex;
+  background-color: var(--Card-Background);
+  justify-content: space-between;
+  box-shadow: 0 0 5px var(--Box-Shadow);
+  border-radius: 0.5rem;
+  width: 100%;
+  padding: 0.5rem;
+}
+
+h1 {
+  margin: 2rem 0px 1rem 0px;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  color: var(--Text);
+  border: 1px solid var(--Box-Shadow);
+  border-radius: 1.5rem;
+  background-color: var(--Card-Background);
+  cursor: pointer;
+}
+
+button:focus {
+  outline: var(--Red-500) solid 2px;
+}
+
+.wrapper {
+  display: flex;
+  padding-bottom: 2rem;
+  flex-direction: column;
+  align-items: center;
+}
+
+.theme-toggle {
+  background-color: var(--Background-Muted);
+  border-radius: 0.75rem;
+  border: none;
+  padding: 0.75rem 0.75rem 0.75rem 0.75rem;
+}
+
+.theme-toggle:hover {
+  background-color: var(--Box-Shadow);
+}
+
+.theme-toggle > img {
+  width: 1rem;
+  height: 1rem;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.button-container button {
+  font-size: 1rem;
+  color: var(--Text);
+}
+
+.button-container button:hover {
+  background-color: var(--Background-Muted);
+  color: var(--Muted-Text);
+}
+
+.card-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.card {
+  position: relative;
+  padding: 1.25rem;
+  height: 200px;
+  border-radius: 1rem;
+  background-color: var(--Card-Background);
+  box-shadow: 0 0 5px var(--Box-Shadow);
+}
+
+.card-info {
+  display: flex;
+  column-gap: 1rem;
+}
+
+.card p {
+  color: var(--Muted-Text);
+}
+
+.card-button-container {
+  position: absolute;
+  bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  right: 0;
+  padding: 0 1rem;
+}
+
+.remove-button:hover {
+  background-color: var(--Btn-Selected);
+  color: var(--Neutral-0);
+}
+
+.toggle-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 50px;
+  height: 25px;
+  border-radius: 1rem;
+  background-color: var(--Box-Shadow);
+  cursor: pointer;
+}
+
+.toggle-wrapper.active {
+  background-color: var(--Btn-Selected);
+  border: none;
+}
+
+.toggle-wrapper.active:hover {
+  background-color: var(--Red-500);
+}
+
+.toggle {
+  background-color: white;
+  width: 23px;
+  height: 23px;
+  border-radius: 100%;
+  position: absolute;
+  left: 2%;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 3px hsl(226, 11%, 37%);
+}
+
+.toggle.active {
+  left: 50%;
+}
+
+button.selected {
+  background-color: var(--Btn-Selected) !important;
+  color: var(--Neutral-0) !important;
+}
+
+@media (min-width: 1440px) {
+  h1 {
+    margin: 0;
+  }
+  .wrapper {
+    padding: 2rem 5rem;
+  }
+  .header-content {
+    width: 100%;
+    display: flex;
+    margin-top: 2rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .button-container {
+    width: auto;
+  }
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
