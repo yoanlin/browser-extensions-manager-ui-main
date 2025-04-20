@@ -1,155 +1,151 @@
-const cardContainer = document.querySelector(".card-container");
-const themeToggle = document.querySelector(".theme-toggle");
-const allButton = document.getElementById("all-button");
-const activeButton = document.getElementById("active-button");
-const inactiveButton = document.getElementById("inactive-button");
+const cardContainer = $(".card-container");
+const removeButton = $(".remove-button");
+const allButton = $("#all-button");
+const activeButton = $("#active-button");
+const inactiveButton = $("#inactive-button");
 
-const allCardData = [];
-const activeCardData = [];
-const inactiveCardData = [];
+const allData = [];
+const activeData = [];
+const inactiveData = [];
 
-function updateSelectedButton(selectedButton) {
-  // Remove 'selected' class from all buttons and add to the selected button
-  [allButton, activeButton, inactiveButton].forEach((button) => {
-    button.classList.remove("selected");
-  });
-  selectedButton.classList.add("selected");
-}
+const buttonSelections = [allButton, activeButton, inactiveButton];
 
-function createCards(cardData) {
-  cardContainer.innerHTML = ""; // Clear existing cards
-  cardData.forEach((card) => {
-    const cardElement = document.createElement("div");
-    cardElement.classList.add("card");
-    cardElement.innerHTML = `
+function createCards(data) {
+  // Clear existing cards
+  cardContainer.empty();
+
+  data.forEach((item) => {
+    const card = $(`
+      <div class="card" data-id="${item.id}">
         <div class="card-info">
-          <img src="${card.logo}" alt="${card.name}" />
+          <img src="${item.logo}" alt="${item.name}" />
           <div>
-            <h2>${card.name}</h2>
-            <p>${card.description}</p>
-            </div>              
+            <h3>${item.name}</h3>        
+            <p>${item.description}</p>
+          </div>
         </div>
 
         <div class="card-button-container">
           <button class="remove-button">Remove</button>
-          <div class="toggle-wrapper ${card.isActive && "active"}" data-id="${
-      card.id
-    }">
-            <div class='toggle ${card.isActive && "active"}'></div>
-          </div>
-        </div>         
-    `;
-    cardContainer.appendChild(cardElement);
+          <div class="toggle-wrapper ${item.isActive && `active`}">
+            <div class="toggle ${item.isActive && `active`}"></div>
+        </div>
+        </div>
+      </div>
+      `);
 
-    const toggle = cardElement.querySelector(".toggle-wrapper");
-    const removeButton = cardElement.querySelector(
-      ".card-button-container > button"
-    );
-
-    // Add event listener to the toggle button
-    toggle.addEventListener("click", () => {
-      toggleActiveState(card.id);
-    });
-
-    // Add event listener to the remove button
-    removeButton.addEventListener("click", () => {
-      removeCard(card.id);
-    });
+    cardContainer.append(card);
   });
 }
 
-function removeCard(cardId) {
-  const cardIndex = allCardData.findIndex((card) => card.id === cardId);
-  if (cardIndex !== -1) {
-    allCardData.splice(cardIndex, 1);
-    updateCardData();
-    createCards(allCardData); // Recreate cards to reflect the removal
-  }
-}
-
-function handleButtonClick(selectedButton, cardData) {
-  updateSelectedButton(selectedButton); // Update selected button
-  createCards(cardData); // Create cards based on selected button
-}
-
-function toggleActiveState(cardId) {
-  const card = allCardData.find((card) => card.id === cardId);
-  if (card) {
-    card.isActive = !card.isActive; // Toggle the isActive property
-    updateCardData(); // Update active and inactive card data arrays
-
-    // Determine which button is currently selected and update the corresponding cards
-    if (allButton.classList.contains("selected")) {
-      createCards(allCardData);
-    } else if (activeButton.classList.contains("selected")) {
-      createCards(activeCardData);
-    } else if (inactiveButton.classList.contains("selected")) {
-      createCards(inactiveCardData);
-    }
-  }
-}
-
-function updateCardData() {
-  activeCardData.length = 0; // Clear the activeCardData array
-  inactiveCardData.length = 0; // Clear the inactiveCardData array
-
-  allCardData.forEach((card) => {
-    if (card.isActive) {
-      activeCardData.push(card);
-    } else {
-      inactiveCardData.push(card);
-    }
-  });
-}
-
-// Event listeners
-document.addEventListener("DOMContentLoaded", () => {
-  updateSelectedButton(allButton);
-
-  fetch("./data.json")
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      data.forEach((card, index) => {
-        card.id = index; // Add an id property to each card
-        allCardData.push(card);
-
-        if (card.isActive) {
-          activeCardData.push(card);
-        } else {
-          inactiveCardData.push(card);
-        }
-      });
-      createCards(allCardData); // Create all cards on initial load
-    })
-    .catch((error) => {
-      console.error("Error fetching card data:", error);
-    });
-});
-
-allButton.addEventListener("click", () => {
-  handleButtonClick(allButton, allCardData); // Show all cards
-});
-
-activeButton.addEventListener("click", () => {
-  handleButtonClick(activeButton, activeCardData); // Show active cards
-});
-
-inactiveButton.addEventListener("click", () => {
-  handleButtonClick(inactiveButton, inactiveCardData); // Show inactive cards
-});
-
-themeToggle.addEventListener("click", () => {
-  const html = document.documentElement;
-  const currentTheme = html.getAttribute("data-theme");
-
-  if (currentTheme === "light") {
-    html.setAttribute("data-theme", "dark");
+function handleActivationToggle(item) {
+  item.isActive = !item.isActive;
+  if (item.isActive) {
+    inactiveData.splice(inactiveData.indexOf(item), 1);
+    activeData.push(item);
   } else {
-    html.setAttribute("data-theme", "light");
+    activeData.splice(activeData.indexOf(item), 1);
+    inactiveData.push(item);
   }
+
+  const selectedButton = buttonSelections.find((button) =>
+    button.hasClass("selected")
+  );
+  if (selectedButton === allButton) {
+    createCards(allData);
+  } else if (selectedButton === activeButton) {
+    createCards(activeData);
+  } else if (selectedButton === inactiveButton) {
+    createCards(inactiveData);
+  }
+}
+
+function removeCard(id) {
+  // Remove the card from allData, activeData, and inactiveData
+  const itemIndex = allData.findIndex((item) => item.id === id);
+  if (itemIndex !== -1) {
+    const removedItem = allData[itemIndex];
+    allData.splice(itemIndex, 1);
+
+    if (removedItem.isActive) {
+      activeData.splice(activeData.indexOf(removedItem), 1);
+    } else {
+      inactiveData.splice(inactiveData.indexOf(removedItem), 1);
+    }
+
+    // Check which button is selected and update the displayed cards
+    const selectedButton = buttonSelections.find((button) =>
+      button.hasClass("selected")
+    );
+    if (selectedButton === allButton) {
+      createCards(allData);
+    } else if (selectedButton === activeButton) {
+      createCards(activeData);
+    } else if (selectedButton === inactiveButton) {
+      createCards(inactiveData);
+    }
+  }
+}
+
+function handleButtonClick(selectedButton, dataToShow) {
+  // Remove selected class from all buttons and add to the clicked button
+  buttonSelections.forEach((button) => {
+    button.removeClass("selected");
+  });
+  selectedButton.addClass("selected");
+
+  createCards(dataToShow);
+}
+
+// Remove card on button click
+
+$(document).ready(() => {
+  $.getJSON("/data.json", (data) => {
+    data.forEach((item, index) => {
+      item.id = index; // Add an ID to each item
+      allData.push(item);
+
+      if (item.isActive) {
+        activeData.push(item);
+      } else {
+        inactiveData.push(item);
+      }
+    });
+
+    // Initialize the page with all data
+    createCards(allData);
+  });
+});
+
+// Event listeners for buttons
+allButton.on("click", () => handleButtonClick(allButton, allData));
+activeButton.on("click", () => handleButtonClick(activeButton, activeData));
+inactiveButton.on("click", () =>
+  handleButtonClick(inactiveButton, inactiveData)
+);
+
+// Event listeners for toggle
+cardContainer.on("click", ".toggle-wrapper", function () {
+  const cardElement = $(this).closest(".card");
+  const itemId = cardElement.data("id");
+  const item = allData.find((item) => item.id === itemId);
+
+  if (item) {
+    handleActivationToggle(item);
+  }
+});
+
+// Event listener for remove button
+cardContainer.on("click", ".remove-button", function () {
+  const cardElement = $(this).closest(".card");
+  const itemId = cardElement.data("id");
+
+  removeCard(itemId);
+});
+
+// Event listener for theme toggle
+$(".theme-toggle").on("click", () => {
+  $("html").attr("data-theme") === "light"
+    ? $("html").attr("data-theme", "dark")
+    : $("html").attr("data-theme", "light");
 });
