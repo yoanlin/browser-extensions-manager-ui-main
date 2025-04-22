@@ -120,37 +120,37 @@ $(document).ready(() => {
     // Initialize the page with all data
     createCards(allData);
   });
-});
 
-// Event listeners for buttons
-allButton.on("click", () => handleButtonClick(allButton, allData));
-activeButton.on("click", () => handleButtonClick(activeButton, activeData));
-inactiveButton.on("click", () =>
-  handleButtonClick(inactiveButton, inactiveData)
-);
+  // Event listeners for buttons
+  allButton.on("click", () => handleButtonClick(allButton, allData));
+  activeButton.on("click", () => handleButtonClick(activeButton, activeData));
+  inactiveButton.on("click", () =>
+    handleButtonClick(inactiveButton, inactiveData)
+  );
 
-// Event listeners for toggle
-cardContainer.on("click", ".toggle-wrapper", function () {
-  const cardElement = $(this).closest(".card");
-  const itemId = cardElement.data("id");
-  const item = allData.find((item) => item.id === itemId);
+  // Event listeners for toggle
+  cardContainer.on("click", ".toggle-wrapper", function () {
+    const cardElement = $(this).closest(".card");
+    const itemId = cardElement.data("id");
+    const item = allData.find((item) => item.id === itemId);
 
-  if (item) {
-    handleActivationToggle(item);
-  }
-});
+    if (item) {
+      handleActivationToggle(item);
+    }
+  });
 
-// Event listener for remove button
-cardContainer.on("click", ".remove-button", function () {
-  const cardElement = $(this).closest(".card");
-  const itemId = cardElement.data("id");
+  // Event listener for remove button
+  cardContainer.on("click", ".remove-button", function () {
+    const cardElement = $(this).closest(".card");
+    const itemId = cardElement.data("id");
 
-  removeCard(itemId);
-});
+    removeCard(itemId);
+  });
 
-// Event listener for theme toggle
-$(".theme-toggle").on("click", () => {
-  $("html").attr("data-theme") === "light"
-    ? $("html").attr("data-theme", "dark")
-    : $("html").attr("data-theme", "light");
+  // Event listener for theme toggle
+  $(".theme-toggle").on("click", () => {
+    $("html").attr("data-theme") === "light"
+      ? $("html").attr("data-theme", "dark")
+      : $("html").attr("data-theme", "light");
+  });
 });
