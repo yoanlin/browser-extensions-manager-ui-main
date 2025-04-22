@@ -129,27 +129,30 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch((error) => {
       console.error("Error fetching card data:", error);
     });
-});
 
-allButton.addEventListener("click", () => {
-  handleButtonClick(allButton, allCardData); // Show all cards
-});
+  // Show all cards
+  allButton.addEventListener("click", () => {
+    handleButtonClick(allButton, allCardData);
+  });
 
-activeButton.addEventListener("click", () => {
-  handleButtonClick(activeButton, activeCardData); // Show active cards
-});
+  // Show active cards
+  activeButton.addEventListener("click", () => {
+    handleButtonClick(activeButton, activeCardData);
+  });
 
-inactiveButton.addEventListener("click", () => {
-  handleButtonClick(inactiveButton, inactiveCardData); // Show inactive cards
-});
+  // Show inactive cards
+  inactiveButton.addEventListener("click", () => {
+    handleButtonClick(inactiveButton, inactiveCardData);
+  });
 
-themeToggle.addEventListener("click", () => {
-  const html = document.documentElement;
-  const currentTheme = html.getAttribute("data-theme");
+  themeToggle.addEventListener("click", () => {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute("data-theme");
 
-  if (currentTheme === "light") {
-    html.setAttribute("data-theme", "dark");
-  } else {
-    html.setAttribute("data-theme", "light");
-  }
+    if (currentTheme === "light") {
+      html.setAttribute("data-theme", "dark");
+    } else {
+      html.setAttribute("data-theme", "light");
+    }
+  });
 });
