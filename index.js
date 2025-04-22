@@ -14,6 +14,9 @@ function createCards(data) {
   // Clear existing cards
   cardContainer.empty();
 
+  // Create a document fragment for better performance
+  const fragment = $(document.createDocumentFragment());
+
   data.forEach((item) => {
     const card = $(`
       <div class="card" data-id="${item.id}">
@@ -34,8 +37,10 @@ function createCards(data) {
       </div>
       `);
 
-    cardContainer.append(card);
+    fragment.append(card);
   });
+
+  cardContainer.append(fragment);
 }
 
 function handleActivationToggle(item) {
